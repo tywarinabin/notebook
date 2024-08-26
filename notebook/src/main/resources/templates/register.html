@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 500px;
+            min-height: 60vh;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #009bff;
+            color: #fff;
+            border-bottom: none;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            width: 100%;
+        }
+
+        .form-control {
+            border-radius: 1rem;
+            box-shadow: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90vh;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .inline-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .inline-group .form-group {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .inline-group .form-group:last-child {
+            margin-right: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h4>Create a New Account</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" th:action="@{/register}" th:object="${user}">
+                <div class="form-group font-weight-bold">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" th:field="*{name}" placeholder="Enter your name" required>
+                </div>
+                <div class="inline-group">
+                    <div class="form-group font-weight-bold">
+                        <label for="age">Age</label>
+                        <input type="number" class="form-control" id="age" th:field="*{age}" placeholder="Enter your age" required>
+                    </div>
+                    <div class="form-group font-weight-bold">
+                        <label for="gender">Gender</label>
+                        <select class="form-control" id="gender" th:field="*{gender}" required>
+                            <option value="" disabled selected>Select your gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group font-weight-bold">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group font-weight-bold">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+                <div class="register-link">
+                    <p>Already have an account? <a th:href="@{/login}">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
