@@ -84,9 +84,7 @@
         <div class="col-md-12">
             <div th:if="${notes.size() == 0}">
                 <h2 class="text-center text-danger mt-5">No notes found for the user.</h2>
-                <div class="back-button mt-3 align-item-center m-auto">
-                    <a th:href="@{/createnewnote} class="btn btn-success">Create Note Now</a>
-                </div>
+                
             </div>
             <div th:each="note : ${notes}" class="card note-card">
                 <div class="card-body">
