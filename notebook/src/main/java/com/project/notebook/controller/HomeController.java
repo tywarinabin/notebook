@@ -35,6 +35,7 @@ public class HomeController {
     @PostMapping("/login")
     public String loginUser(@ModelAttribute("user") User user) {
         // Handle login logic here (e.g., authenticate the user)
+        user.setEmail(user.getEmail().toLowerCase());
         return "redirect:/"; // Redirect to home page after successful login
     }
     public String indexPage(Model model, @AuthenticationPrincipal UserDetails userDetails) {

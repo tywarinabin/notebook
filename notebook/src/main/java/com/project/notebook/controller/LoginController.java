@@ -36,6 +36,7 @@ public class LoginController {
     @PostMapping("/register")
     public String registerPost(@ModelAttribute("user") User user, HttpServletRequest request) throws ServletException {
         String password = user.getPassword();
+        user.setEmail(user.getEmail().toLowerCase());
         user.setPassword(bCryptPasswordEncoder.encode(password)); // Use PasswordEncoder
 
         // Remove role assignment
@@ -44,7 +45,7 @@ public class LoginController {
         userRepository.save(user);
 
         // Perform login after registration
-        request.login(user.getEmail(), password);
+        request.login(user.getEmail().toLowerCase(), password);
 
         return "redirect:/";
     }

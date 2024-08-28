@@ -11,9 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class NoteController {
@@ -47,10 +49,23 @@ public class NoteController {
 
         return "redirect:/notes"; // Redirect to the notes list after creation
     }
+    @GetMapping("/createNote/{id}")
+    public String editNote(@PathVariable("id") Long id, Model model) {
+        Note note = noteRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid note Id:" + id));
+        model.addAttribute("note", note);
+        return "createNote"; // Load the createNote template with the note data
+    }
+    @PostMapping("/deleteNote/{id}")
+    public String deleteNote(@PathVariable("id") Long id) {
+        noteRepository.deleteById(id);
+        return "redirect:/notes"; // Redirect to the notes list after deletion
+    }
+
+
     @GetMapping("/notes")
     public String getUserNotes(Model model, @AuthenticationPrincipal UserDetails userDetails) {
         // Get the logged-in user's email
-        String email = userDetails.getUsername();
+        String email = userDetails.getUsername().toLowerCase();
         User user = userRepository.findUserByEmail(email).get();
 
         // Retrieve all notes for the logged-in user
@@ -61,4 +76,15 @@ public class NoteController {
 
         return "notes"; // Return the Thymeleaf template name for displaying the notes
     }
+    @GetMapping("/viewNote/{id}")
+    public String viewNote(@PathVariable("id") Long id, Model model) {
+        Optional<Note> note = noteRepository.findById(id);
+        if (note.isPresent()) {
+            model.addAttribute("note", note.get());
+            return "viewNote"; // Thymeleaf template name
+        } else {
+            return "redirect:/notes"; // Redirect if note not found
+        }
+    }
+
 }

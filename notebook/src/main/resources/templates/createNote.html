@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,62 +8,117 @@
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
           integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <title>Create Note</title>
+    <title th:text="${note.id} != null ? 'Updating an Existing Note' : 'Creating a New Note'">Create Note</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .create-note-container {
+            margin-top: 50px;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .create-note-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        .btn-save-note {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-save-note:hover {
+            background-color: #218838;
+        }
+        .navbar-brand img {
+            height: 40px;
+        }
+         .active {
+            border-bottom: 2px solid #007bff; /* Blue underline for active item */
+        }
+        .nav-item,label{
+        font-weight:bold;
+        }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img th:src="@{/images/logo.png}" alt="Logo" width="auto" height="40" class="d-inline-block align-top"/>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto"></ul>
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/notes}">Notes</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" th:href="@{/logout}">Logout</a>
-                </li>
-            </ul>
-        </div>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" th:href="@{/}">Note !</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active mr-1" sec:authorize="isAuthenticated()">
+                <a class="nav-link " th:href="@{/createnewnote}" th:text="${note.id} != null ? 'Update Note' : 'Create Note'">Create Note</a>
+            </li>
+            <li class="nav-item mr-2" sec:authorize="isAuthenticated()">
+                <a class="nav-link " th:href="@{/notes}">Notes</a>
+            </li>
+            <!-- Search Form -->
+            <!-- Login Button (Visible if user is not authenticated) -->
+
+            <!-- Logout Button (Visible if user is authenticated) -->
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="btn btn-danger my-2 my-sm-0" th:href="@{/logout}">Logout</a>
+            </li>
+        </ul>
     </div>
 </nav>
 
+<!-- Create/Update Note Form -->
 <div class="container">
-    <div class="row">
-        <div class="col-sm-6 offset-sm-3">
-            <h2>Create Note</h2>
-            <form th:action="@{/createnewnote}" method="post" th:object="${note}">
-                <!-- Hidden field to hold the note ID (if needed) -->
-                <input type="hidden" th:field="*{id}">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="create-note-container">
+                <h2 th:text="${note.id} != null ? 'Update an Existing Note' : 'Create a New Note'">Create Note</h2>
+                <form th:action="@{/createnewnote}" method="post" th:object="${note}">
+                    <!-- Hidden field for note ID -->
+                    <input type="hidden" th:field="*{id}">
 
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" class="form-control" th:field="*{title}" id="title"
-                           placeholder="Enter note title" required>
-                </div>
+                    <!-- Title Input -->
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" th:field="*{title}" id="title"
+                               placeholder="Enter note title" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea class="form-control" th:field="*{description}" id="description"
-                              placeholder="Enter note description" rows="5" required></textarea>
-                </div>
+                    <!-- Description Input -->
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" th:field="*{description}" id="description"
+                                  placeholder="Enter note description" rows="5" required></textarea>
+                    </div>
 
-                <button type="submit" class="btn btn-success">Create Note</button>
-            </form>
-
+                    <!-- Save/Update Button -->
+                    <button type="submit" class="btn-save-note" th:text="${note.id} != null ? 'Save Changes' : 'Save Note'">Save Note</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!-- JS Dependencies -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 </body>
 </html>

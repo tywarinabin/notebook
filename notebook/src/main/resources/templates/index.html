@@ -44,36 +44,27 @@
 </head>
 <body>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" th:href="@{/}">Logo</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" th:href="@{/}">Note !</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link" th:href="@{/createnewnote}">Create Note</a>
+                <a class="nav-link mr-2" th:href="@{/createnewnote}">Create Note</a>
             </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link" th:href="@{/notes}">Notes</a>
-            </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link" th:href="@{/favourites}">Favorites</a>
+                <a class="nav-link mr-2" th:href="@{/notes}">Notes</a>
             </li>
             <!-- Search Form -->
-            <li class="nav-item mr-2">
-                <form class="form-inline my-2 my-lg-0" th:action="@{/search}" method="get">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
-            </li>
             <!-- Login Button (Visible if user is not authenticated) -->
             <li class="nav-item mr-2" sec:authorize="isAnonymous()">
                 <a class="btn btn-success my-2 my-sm-0" th:href="@{/login}">Login</a>
             </li>
             <!-- Logout Button (Visible if user is authenticated) -->
             <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="btn btn-danger my-2 my-sm-0" th:href="@{/logout}">Logout</a>
+                <a class="btn btn-danger my-2 my-sm-0 " th:href="@{/logout}">Logout</a>
             </li>
         </ul>
     </div>
@@ -81,10 +72,9 @@
 
 <!-- Main Content -->
 <div class="container">
-    <h1>Welcome</h1>
 
     <!-- Display the logged-in user's username -->
-    <p class ="text-danger font-weight-bold">Hello, <span sec:authentication="name"></span>!</p>
+    <h3 class ="text-center font-weight-bold m-2">Hello, <span sec:authentication="name" class="text-success"></span>!</h3>
 
     <!-- Other content here -->
 
